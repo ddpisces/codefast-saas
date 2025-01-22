@@ -3,10 +3,14 @@ import ListItems from "./components/ListItems";
 import FAQListItems from "./components/FAQListItems";
 import Image from "next/image";
 import productDemo from "./productDemo.jpeg";
+import { auth } from "@/auth";
 
-export default function Home() {
+export default async function Home() {
   const isLoggedIn = true;
   const name = "Mardix";
+
+  const session = await auth();
+  console.log(session);
 
   let greeting2 = `Hello ${isLoggedIn ? name : "Guest"}`;
   console.log(greeting2);
