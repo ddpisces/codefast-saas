@@ -37,3 +37,33 @@ export async function POST(req) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const { searchParams } = req.nextUrl;
+    const boardId = searchParams.get("boardId");
+
+    if (!boardId) {
+      return NextResponse.json(
+        { error: "Board ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json({ error: "Not Authorized." }, { status: 401 });
+    }
+
+    await Board.deleteOne({ _id: boardId, userId: session?.user?.id });
+
+    const user = await User.findById(session?.user?.id);
+    user.boards = user.boards.filter((id) => id.toString() !== boardId);
+    await user.save();
+
+    return NextResponse.json({ message: "Board deleted" });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
