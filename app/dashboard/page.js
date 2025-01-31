@@ -5,6 +5,8 @@ import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import Board from "@/models/Board";
 import Link from "next/link";
+import ButtonCheckout from "../components/ButtonCheckout";
+import ButtonPortal from "../components/ButtonPortal";
 
 async function getUser() {
   const session = await auth();
@@ -24,7 +26,8 @@ export default async function Dashboard() {
   return (
     <main className="bg-base-200 min-h-screen">
       <section className="bg-base-100">
-        <div className="max-w-5xl mx-auto px-5 py-3 flex justify-end">
+        <div className="max-w-5xl mx-auto px-5 py-3 flex justify-between">
+          {user.hasAccess ? <ButtonPortal /> : <ButtonCheckout />}
           <ButtonLogout />
         </div>
       </section>
